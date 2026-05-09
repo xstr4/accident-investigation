@@ -14,7 +14,8 @@ app = Flask(__name__)
 CORS(app)
 
 # ========== 加载模型 ==========
-MODEL_PATH = r"model\best_int8.onnx"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, '..', 'model', 'best_int8.onnx')
 
 print("=" * 60)
 print("保险查勘助手 - 测试服务器启动中...")
