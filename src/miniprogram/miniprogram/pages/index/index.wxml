@@ -1,0 +1,79 @@
+<!--pages/index/index.wxml-->
+<!-- 保险查勘助手页面 -->
+
+<view class="container">
+  
+  <!-- ===== 顶部标题区 ===== -->
+  <view class="header">
+    <text class="title">🚗 保险查勘助手</text>
+    <text class="subtitle">AI智能识别车祸现场</text>
+  </view>
+
+  <!-- ===== 图片选择区 ===== -->
+  <!-- bindtap="takePhoto" 表示点击这个区域会触发 takePhoto 函数 -->
+  <view class="camera-section" bindtap="takePhoto">
+    
+    <!-- 如果有图片，显示图片预览 -->
+    <image 
+      wx:if="{{imagePath}}" 
+      src="{{imagePath}}" 
+      mode="aspectFit" 
+      class="preview-img"
+    />
+  
+    <!-- 如果没有图片，显示占位提示 -->
+    <view wx:else class="camera-placeholder">
+      <text class="camera-icon">📷</text>
+      <text class="placeholder-text">点击拍照或从相册选择</text>
+    </view>
+  </view>
+
+  <!-- ===== 结果展示区 ===== -->
+  <!-- wx:if="{{result}}" 表示只有当 result 有值时才显示这个区域 -->
+  <view class="result-section" wx:if="{{result}}">
+    
+    <!-- 结果卡片，根据置信度显示不同颜色 -->
+    <!-- class 里用了三元表达式：confidence>70显示warning样式，否则normal -->
+    <view class="result-card {{confidence > 70 ? 'warning' : 'normal'}}">
+      
+      <!-- 检测结果文字 -->
+      <text class="result-title">{{result}}</text>
+      
+      <!-- 置信度显示（只有当 confidence > 0 时显示） -->
+      <text class="result-confidence" wx:if="{{confidence > 0}}">
+        置信度: {{confidence}}%
+      </text>
+      
+      <!-- 检测到的目标数量 -->
+      <view wx:if="{{boxes.length > 0}}" class="boxes-info">
+        <text>检测到 {{boxes.length}} 个可疑目标</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 操作按钮区 ===== -->
+  <view class="action-buttons">
+    
+    <!-- 主按钮：拍照/选图 -->
+    <!-- loading="{{loading}}" 表示推理中时按钮显示加载状态 -->
+    <button 
+      class="btn-primary" 
+      bindtap="takePhoto" 
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      {{loading ? 'AI分析中...' : '📸 拍照查勘'}}
+    </button>
+    
+    <!-- 次要按钮：历史记录 -->
+    <button class="btn-secondary" bindtap="viewHistory">
+      📋 历史记录
+    </button>
+  </view>
+
+  <!-- ===== 底部说明 ===== -->
+  <view class="footer">
+    <text>AI模型本地推理，保护您的隐私安全</text>
+  </view>
+
+</view>
